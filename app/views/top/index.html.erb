@@ -1,13 +1,22 @@
 <todo></todo>
 
+<todo2></todo2>
+
 <script>
+ds = new ItemStore([
+  { title: 'A', done: true },
+  { title: 'B' }
+]);
+
 riot.mount('todo', {
-  title: 'I want to behave!',
-  dataStore: new ItemStore([
-    { title: 'A', done: true },
-    { title: 'B' }
-  ])
-})
+  title: 'Todo 1',
+  dataStore: ds
+});
+
+riot.mount('todo2', {
+  title: 'Todo 2',
+  dataStore: ds
+});
 </script>
 
 <p id="log">

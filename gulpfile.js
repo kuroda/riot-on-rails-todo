@@ -7,7 +7,7 @@ gulp.task('riot', function(){
     .pipe(gulp.dest('./app/assets/javascripts/riot/'));
 });
 
-gulp.task('watch', function(){
+gulp.task('watch', ['riot'], function(){
   gulp.watch('./app/assets/riot-tags/*.tag', ['riot']);
 });
 
