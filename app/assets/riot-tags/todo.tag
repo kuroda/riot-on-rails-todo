@@ -17,7 +17,8 @@
 
   <!-- this script tag is optional -->
   <script>
-    this.items = opts.items
+    this.dataStore = opts.dataStore
+    this.items = this.dataStore.items
 
     edit(e) {
       this.text = e.target.value
@@ -25,8 +26,10 @@
 
     add(e) {
       if (this.text) {
-        this.items.push({ title: this.text })
+        this.dataStore.addItem({ title: this.text })
         this.text = this.input.value = ''
+        this.items = this.dataStore.items
+        this.update()
       }
     }
 
