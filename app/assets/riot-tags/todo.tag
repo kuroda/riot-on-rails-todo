@@ -14,11 +14,10 @@
   </form>
 
   <script>
-    this.items = opts.dataStore.items.slice(0)
-    self = this
+    this.items = opts.dataStore.items
+    var tag = this
     opts.dataStore.on('update', function() {
-      self.items = opts.dataStore.items.slice(0)
-      self.update()
+      tag.update()
     })
 
     edit(e) {
