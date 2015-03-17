@@ -1,0 +1,7 @@
+{
+  "name": "riot-on-rails-todo",
+  "version": "0.0.1",
+  "dependencies": {
+    "riot": "2.0.13"
+  }
+}

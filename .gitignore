@@ -15,3 +15,6 @@
 /log/*
 !/log/.keep
 /tmp
+
+# Ignore files managed by Bower
+vendor/assets/bower_components
