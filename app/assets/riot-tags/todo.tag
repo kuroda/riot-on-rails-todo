@@ -15,9 +15,9 @@
     <button disabled={ !text }>Add #{ items.filter(filter).length + 1 }</button>
   </form>
 
-  <!-- this script tag is optional -->
   <script>
-    this.items = opts.items
+    this.dataStore = opts.dataStore
+    this.items = this.dataStore.items
 
     edit(e) {
       this.text = e.target.value
@@ -25,12 +25,11 @@
 
     add(e) {
       if (this.text) {
-        this.items.push({ title: this.text })
+        this.dataStore.addItem({ title: this.text })
         this.text = this.input.value = ''
       }
     }
 
-    // an example how to filter items on the list
     filter(item) {
       return !item.hidden
     }
@@ -41,6 +40,5 @@
       return true
     }
   </script>
-
 
 </todo>
