@@ -14,20 +14,21 @@
   </form>
 
   <script>
-    this.items = opts.dataStore.items
-    var tag = this
-    opts.dataStore.on('update', function() {
-      tag.update()
-    })
+    var self = this
+    var ds = opts.dataStore
+
+    self.items = ds.items
+
+    ds.on('update', function() { self.update() })
 
     edit(e) {
-      this.text = e.target.value
+      self.text = e.target.value
     }
 
     add(e) {
-      if (this.text) {
-        opts.dataStore.addItem({ title: this.text })
-        this.text = this.input.value = ''
+      if (self.text) {
+        ds.addItem({ title: self.text })
+        self.text = self.input.value = ''
       }
     }
   </script>
