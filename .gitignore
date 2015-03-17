@@ -21,3 +21,7 @@ vendor/assets/bower_components
 
 # Ignore files managed by npm
 node_modules
+
+# Ignore compiled riot javascripts
+/app/assets/javascripts/riot/*
+!/app/assets/javascripts/riot/.keep
