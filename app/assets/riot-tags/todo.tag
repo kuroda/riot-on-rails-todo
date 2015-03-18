@@ -1,11 +1,11 @@
 <todo>
 
-  <h3>{ opts.title }</h3>
+  <h3>{ opts.title } ({items.length})</h3>
 
   <ul>
     <li each={ items.filter(filter) }>
       <label class={ completed: done }>
-        <input type="checkbox" checked={ done } onclick={ parent.toggle }> { title }
+        <input type="checkbox" checked={ done } onclick={ parent.toggle }> { name }
       </label>
     </li>
   </ul>
@@ -29,7 +29,7 @@
 
     add(e) {
       if (self.text) {
-        ds.addItem({ title: self.text })
+        ds.addItem({ name: self.text })
         self.text = self.input.value = ''
       }
     }
