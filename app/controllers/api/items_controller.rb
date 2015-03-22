@@ -11,6 +11,15 @@ class Api::ItemsController < ApplicationController
     end
   end
 
+  def update
+    item = Item.find(params[:id])
+    if item.update_attributes(item_params)
+      render text: 'OK'
+    else
+      render text: 'NG'
+    end
+  end
+
   private
   def item_params
     params.require(:item).permit(:name, :done)

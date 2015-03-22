@@ -5,17 +5,6 @@ var ItemStore = function() {
 }
 
 ItemStore.prototype = {
-  addItem: function(item) {
-    var self = this
-    $.ajax({
-      type: 'POST',
-      url: '/api/items',
-      data: { item: item }
-    }).done(function(data) {
-      if (data === 'OK')
-        self.refresh()
-    })
-  },
   refresh: function() {
     var self = this
     $.ajax({
@@ -27,6 +16,28 @@ ItemStore.prototype = {
         self.items.push(data[i])
       }
       self.trigger('update')
+    })
+  },
+  addItem: function(item) {
+    var self = this
+    $.ajax({
+      type: 'POST',
+      url: '/api/items',
+      data: { item: item }
+    }).done(function(data) {
+      if (data === 'OK')
+        self.refresh()
+    })
+  },
+  toggleItem: function(item) {
+    var self = this
+    $.ajax({
+      type: 'PATCH',
+      url: '/api/items/' + item.id,
+      data: { item: { done: !item.done } }
+    }).done(function(data) {
+      if (data === 'OK')
+        self.refresh()
     })
   }
 }

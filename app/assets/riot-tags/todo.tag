@@ -1,6 +1,6 @@
 <todo>
 
-  <h3>{ opts.title } ({items.length})</h3>
+  <h3>{ opts.title } ({items.length}).</h3>
 
   <ul>
     <li each={ items.filter(filter) }>
@@ -39,8 +39,7 @@
     }
 
     toggle(e) {
-      var item = e.item
-      item.done = !item.done
+      ds.toggleItem(e.item)
       return true
     }
   </script>
