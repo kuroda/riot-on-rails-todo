@@ -56,7 +56,7 @@
 
     createItem(e) {
       if (self.text) {
-        ds.createItem({ name: self.text })
+        ds.createItem(self.text)
         self.text = self.input1.value = ''
       }
     }

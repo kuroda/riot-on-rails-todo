@@ -18,12 +18,12 @@ ItemStore.prototype = {
       self.trigger('update')
     })
   },
-  createItem: function(item) {
+  createItem: function(name) {
     var self = this
     $.ajax({
       type: 'POST',
       url: '/api/items',
-      data: { item: item }
+      data: { item: { name: name } }
     }).done(function(data) {
       if (data === 'OK')
         self.refresh()
