@@ -5,19 +5,33 @@
   <ul>
     <li each={ items.filter(filter) }>
       <label class={ completed: done }>
-        <input type="checkbox" checked={ done } onclick={ parent.toggle }> { name }
+        <input type="checkbox" checked={ done } onclick={ parent.toggle } />
+        <span class={ modifying: modifying }>
+          { name }
+        </span>
       </label>
-      <span class="del-link" onclick={ parent.destroy } >DELETE</span>
+      <span class="button" onclick={ parent.editItem } >UPDATE</span>
+      <span class="button" onclick={ parent.destroy } >DELETE</span>
     </li>
   </ul>
 
-  <form onsubmit={ add }>
+  <form if={ !modifying } onsubmit={ add }>
     <input name="input" onkeyup={ edit }>
     <button disabled={ !text }>Add #{ items.filter(filter).length + 1 }</button>
   </form>
 
+  <form if={ modifying } onsubmit={ updateItem }>
+    <input name="input" onkeyup={ edit }>
+    <button disabled={ !text }>Update</button>
+    <button onclick={ cancelModification }>Cancel</button>
+  </form>
+
   <style scoped>
-    span.del-link {
+    span.modifying {
+      font-weight: bold;
+      color: #800;
+    }
+    span.button {
       cursor: pointer;
       background-color: #888;
       color: #fff;
@@ -31,6 +45,8 @@
     var ds = opts.dataStore
 
     self.items = ds.items
+    self.modifying = false
+    self.targetItem = undefined
 
     ds.on('update', function() { self.update() })
 
@@ -43,6 +59,32 @@
         ds.addItem({ name: self.text })
         self.text = self.input.value = ''
       }
+    }
+
+    editItem(e) {
+      if (self.modifying) {
+        self.cancelModification()
+      }
+      else {
+        self.targetItem = e.item
+        self.modifying = true
+        self.text = self.input.value = e.item.name
+        ds.setTarget(e.item)
+        self.update()
+      }
+    }
+
+    updateItem(e) {
+      if (self.text) {
+        ds.updateItem(self.targetItem, self.text)
+        self.text = self.input.value = ''
+      }
+    }
+
+    cancelModification() {
+      self.modifying = false
+      ds.resetTarget()
+      self.update()
     }
 
     destroy(e) {

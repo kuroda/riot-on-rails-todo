@@ -29,6 +29,17 @@ ItemStore.prototype = {
         self.refresh()
     })
   },
+  updateItem: function(item, name) {
+    var self = this
+    $.ajax({
+      type: 'PATCH',
+      url: '/api/items/' + item.id,
+      data: { item: { name: name } }
+    }).done(function(data) {
+      if (data === 'OK')
+        self.refresh()
+    })
+  },
   deleteItem: function(item) {
     var self = this
     $.ajax({
@@ -49,5 +60,20 @@ ItemStore.prototype = {
       if (data === 'OK')
         self.refresh()
     })
+  },
+  setTarget: function(item) {
+    var self = this
+    for (i = 0; i < self.items.length; i++) {
+      if (self.items[i].id === item.id)
+        self.items[i].modifying = true
+      else
+        self.items[i].modifying = false
+    }
+  },
+  resetTarget: function() {
+    var self = this
+    for (i = 0; i < self.items.length; i++) {
+      self.items[i].modifying = false
+    }
   }
 }
