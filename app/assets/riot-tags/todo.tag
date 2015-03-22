@@ -1,27 +1,27 @@
 <todo>
 
-  <h3>{ opts.title } ({items.length}).</h3>
+  <h3>{ opts.title } ({items.length})</h3>
 
   <ul>
     <li each={ items.filter(filter) }>
       <label class={ completed: done }>
-        <input type="checkbox" checked={ done } onclick={ parent.toggle } />
+        <input type="checkbox" checked={ done } onclick={ parent.toggleItem } />
         <span class={ modifying: modifying }>
           { name }
         </span>
       </label>
       <span class="button" onclick={ parent.editItem } >UPDATE</span>
-      <span class="button" onclick={ parent.destroy } >DELETE</span>
+      <span class="button" onclick={ parent.destroyItem } >DELETE</span>
     </li>
   </ul>
 
-  <form if={ !modifying } onsubmit={ add }>
-    <input name="input" onkeyup={ edit }>
+  <form if={ !modifying } onsubmit={ createItem }>
+    <input name="input1" onkeyup={ changeText }>
     <button disabled={ !text }>Add #{ items.filter(filter).length + 1 }</button>
   </form>
 
   <form if={ modifying } onsubmit={ updateItem }>
-    <input name="input" onkeyup={ edit }>
+    <input name="input2" onkeyup={ changeText }>
     <button disabled={ !text }>Update</button>
     <button onclick={ cancelModification }>Cancel</button>
   </form>
@@ -50,14 +50,14 @@
 
     ds.on('update', function() { self.update() })
 
-    edit(e) {
+    changeText(e) {
       self.text = e.target.value
     }
 
-    add(e) {
+    createItem(e) {
       if (self.text) {
-        ds.addItem({ name: self.text })
-        self.text = self.input.value = ''
+        ds.createItem({ name: self.text })
+        self.text = self.input1.value = ''
       }
     }
 
@@ -68,7 +68,7 @@
       else {
         self.targetItem = e.item
         self.modifying = true
-        self.text = self.input.value = e.item.name
+        self.text = self.input2.value = e.item.name
         ds.setTarget(e.item)
         self.update()
       }
@@ -77,21 +77,23 @@
     updateItem(e) {
       if (self.text) {
         ds.updateItem(self.targetItem, self.text)
-        self.text = self.input.value = ''
+        self.cancelModification()
       }
     }
 
     cancelModification() {
       self.modifying = false
+      self.text = self.input1.value = self.input2.value = ''
       ds.resetTarget()
       self.update()
     }
 
-    destroy(e) {
+    destroyItem(e) {
+      self.cancelModification()
       ds.deleteItem(e.item)
     }
 
-    toggle(e) {
+    toggleItem(e) {
       ds.toggleItem(e.item)
       return true
     }

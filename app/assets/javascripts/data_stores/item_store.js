@@ -18,7 +18,7 @@ ItemStore.prototype = {
       self.trigger('update')
     })
   },
-  addItem: function(item) {
+  createItem: function(item) {
     var self = this
     $.ajax({
       type: 'POST',
