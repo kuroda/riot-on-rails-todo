@@ -7,6 +7,7 @@
       <label class={ completed: done }>
         <input type="checkbox" checked={ done } onclick={ parent.toggle }> { name }
       </label>
+      <span class="del-link" onclick={ parent.destroy } >DELETE</span>
     </li>
   </ul>
 
@@ -14,6 +15,16 @@
     <input name="input" onkeyup={ edit }>
     <button disabled={ !text }>Add #{ items.filter(filter).length + 1 }</button>
   </form>
+
+  <style scoped>
+    span.del-link {
+      cursor: pointer;
+      background-color: #888;
+      color: #fff;
+      padding: 2px;
+      font-size: 60%;
+    }
+  </style>
 
   <script>
     var self = this
@@ -34,13 +45,17 @@
       }
     }
 
-    filter(item) {
-      return !item.hidden
+    destroy(e) {
+      ds.deleteItem(e.item)
     }
 
     toggle(e) {
       ds.toggleItem(e.item)
       return true
+    }
+
+    filter(item) {
+      return !item.hidden
     }
   </script>
 

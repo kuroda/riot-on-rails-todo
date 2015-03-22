@@ -29,6 +29,16 @@ ItemStore.prototype = {
         self.refresh()
     })
   },
+  deleteItem: function(item) {
+    var self = this
+    $.ajax({
+      type: 'DELETE',
+      url: '/api/items/' + item.id
+    }).done(function(data) {
+      if (data === 'OK')
+        self.refresh()
+    })
+  },
   toggleItem: function(item) {
     var self = this
     $.ajax({
