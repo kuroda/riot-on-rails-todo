@@ -69,11 +69,5 @@ ItemStore.prototype = {
       else
         self.items[i].modifying = false
     }
-  },
-  resetTarget: function() {
-    var self = this
-    for (i = 0; i < self.items.length; i++) {
-      self.items[i].modifying = false
-    }
   }
 }

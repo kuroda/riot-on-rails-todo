@@ -6,7 +6,7 @@
     <li each={ items.filter(filter) }>
       <label class={ completed: done }>
         <input type="checkbox" checked={ done } onclick={ parent.toggleItem } />
-        <span class={ modifying: modifying }>
+        <span class={ modifying: parent.modifying && modifying }>
           { name }
         </span>
       </label>
@@ -77,25 +77,28 @@
     updateItem(e) {
       if (self.text) {
         ds.updateItem(self.targetItem, self.text)
-        self.cancelModification()
+        self.reset()
       }
     }
 
     cancelModification() {
-      self.modifying = false
-      self.text = self.input1.value = self.input2.value = ''
-      ds.resetTarget()
+      self.reset()
       self.update()
     }
 
     destroyItem(e) {
-      self.cancelModification()
+      self.reset()
       ds.deleteItem(e.item)
     }
 
     toggleItem(e) {
       ds.toggleItem(e.item)
       return true
+    }
+
+    reset() {
+      self.modifying = false
+      self.text = self.input1.value = self.input2.value = ''
     }
 
     filter(item) {
