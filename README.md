@@ -4,18 +4,36 @@ This application is for demonstration, not for production use.
 
 # PREREQUISITES
 
+Following softwares are required to run this application:
+
 * Ruby 2.0 or later
 * [Node.js](https://nodejs.org/)
 * [bower](http://bower.io/)
 * [gulp](http://gulpjs.com/)
 
-You can install bower and gulp as below:
+## Install Node.js and npm
+
+### On Mac OS X with Homebrew
+
+```
+$ brew install node
+```
+
+### On Ubuntu
+
+```
+$ sudo add-apt-repository ppa:chris-lea/node.js
+$ sudo apt-get update
+$ sudo apt-get install nodejs npm
+```
+
+## Install bower and gulp
 
 ```
 $ sudo npm install --global bower gulp
 ```
 
-# INSTALLATION
+# INSTALLATION OF THIS APPLICATION
 
 ```
 $ git clone https://github.com/kuroda/riot-on-rails-todo.git
