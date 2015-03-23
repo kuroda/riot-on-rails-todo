@@ -17,6 +17,7 @@ Following softwares are required to run this application:
 
 ```
 $ brew install node
+$ sudo chown -R $(whoami) ~/.npm
 ```
 
 ### On Ubuntu
