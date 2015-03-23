@@ -20,7 +20,10 @@
   },
   "homepage": "https://github.com/kuroda/riot-on-rails-todo",
   "devDependencies": {
+    "del": "^1.1.1",
     "gulp": "^3.8.11",
-    "gulp-riot": "^0.2.12"
+    "gulp-plumber": "^1.0.0",
+    "gulp-riot": "^0.2.12",
+    "gulp-watch": "^4.2.0"
   }
 }
