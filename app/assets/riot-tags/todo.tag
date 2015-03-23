@@ -23,7 +23,7 @@
   <form if={ modifying } onsubmit={ updateItem }>
     <input name="input2" onkeyup={ changeText }>
     <button disabled={ !text }>Update</button>
-    <button onclick={ cancelModification }>Cancel</button>
+    <button onclick={ reset }>Cancel</button>
   </form>
 
   <style scoped>
@@ -63,14 +63,13 @@
 
     editItem(e) {
       if (self.modifying) {
-        self.cancelModification()
+        self.reset()
       }
       else {
         self.targetItem = e.item
         self.modifying = true
         self.text = self.input2.value = e.item.name
         ds.setTarget(e.item)
-        self.update()
       }
     }
 
@@ -79,11 +78,6 @@
         ds.updateItem(self.targetItem, self.text)
         self.reset()
       }
-    }
-
-    cancelModification() {
-      self.reset()
-      self.update()
     }
 
     destroyItem(e) {

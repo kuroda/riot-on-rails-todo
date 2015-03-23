@@ -1,8 +1,15 @@
-<todo></todo>
+<div id="container">
+  <div id="todo"><todo></todo></div>
+  <div id="sidebar"><sidebar></sidebar></div>
+</div>
 
 <script>
+ds = new ItemStore()
 riot.mount('todo', {
   title: 'My Todo List',
-  dataStore: new ItemStore()
+  dataStore: ds
+})
+riot.mount('sidebar', {
+  dataStore: ds
 })
 </script>
