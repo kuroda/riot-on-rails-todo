@@ -17,7 +17,6 @@ Following softwares are required to run this application:
 
 ```
 $ brew install node
-$ sudo chown -R $(whoami) ~/.npm
 ```
 
 ### On Ubuntu
@@ -32,6 +31,7 @@ $ sudo apt-get install nodejs npm
 
 ```
 $ sudo npm install --global bower gulp
+$ sudo chown -R $(whoami) ~/.npm
 ```
 
 # INSTALLATION OF THIS APPLICATION
