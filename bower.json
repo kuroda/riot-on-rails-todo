@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "dependencies": {
     "riot": "2.0.12",
-    "lodash": "3.5.0"
+    "lodash": "3.5.0",
+    "virtual-dom": "~2.0.1"
   }
 }

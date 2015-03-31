@@ -1,10 +1,9 @@
-var ItemStore = function() {
-  riot.observable(this)
+var ItemStore = function ItemStore() {
   this.items = []
   this.refresh()
 }
 
-ItemStore.prototype = {
+ItemStore.prototype = $.extend(Observable, {
   refresh: function() {
     var self = this
     $.ajax({
@@ -70,4 +69,4 @@ ItemStore.prototype = {
         self.items[i].modifying = false
     }
   }
-}
+});
