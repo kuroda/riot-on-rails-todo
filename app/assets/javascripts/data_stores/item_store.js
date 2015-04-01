@@ -39,34 +39,38 @@ ItemStore.prototype = $.extend(Observable, {
         self.refresh()
     })
   },
-  deleteItem: function(item) {
+  deleteItem: function(id) {
     var self = this
     $.ajax({
       type: 'DELETE',
-      url: '/api/items/' + item.id
+      url: '/api/items/' + id
     }).done(function(data) {
       if (data === 'OK')
         self.refresh()
     })
   },
-  toggleItem: function(item) {
-    var self = this
+  toggleItem: function(id) {
+    var self = this,
+        item = this.getItem(id)
     $.ajax({
       type: 'PATCH',
-      url: '/api/items/' + item.id,
+      url: '/api/items/' + id,
       data: { item: { done: !item.done } }
     }).done(function(data) {
       if (data === 'OK')
         self.refresh()
     })
   },
-  setTarget: function(item) {
+  setTarget: function(id) {
     var self = this
     for (i = 0; i < self.items.length; i++) {
-      if (self.items[i].id === item.id)
+      if (self.items[i].id === Number(id))
         self.items[i].modifying = true
       else
         self.items[i].modifying = false
     }
+  },
+  getItem: function(id) {
+    return _.find(this.items, function(item) { return item.id === Number(id) })
   }
 });

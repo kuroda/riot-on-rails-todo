@@ -7,4 +7,5 @@
 //= require_tree ./data_stores
 //= require_tree ./riot
 //= require ./component
+//= require ./vdom_builder
 //= require_tree ./vdom

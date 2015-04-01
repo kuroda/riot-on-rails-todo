@@ -3,14 +3,14 @@
   padding: 15px;
   overflow: hidden;
 
-  div {
+  > div {
     float: left;
     background-color: #fff;
     width: 400px;
     padding: 15px;
     margin: 15px;
   }
-  div#sidebar {
+  > div#sidebar {
     width: 200px;
   }
 }
