@@ -20,17 +20,20 @@ Todo.prototype = $.extend({}, Component, {
         for (var i = 0; i < ds.items.length; i++) {
           (function(item) {
             this.li(function() {
-              this.label(function() {
-                this.input({
-                  type: 'checkbox',
-                  checked: item.done,
-                  onclick: function(e) { self.toggleItem(item) }
-                })
-                this.text(' ');
-                this.span(item.name, {
-                  className: self.modifying && item.modifying && 'modifying'
-                })
-              }, { class: item.done && 'completed' })
+              this.label(
+                { class: item.done && 'completed' },
+                function() {
+                  this.input({
+                    type: 'checkbox',
+                    checked: item.done,
+                    onclick: function(e) { self.toggleItem(item) }
+                  })
+                  this.text(' ');
+                  this.span(item.name, {
+                    className: self.modifying && item.modifying && 'modifying'
+                  })
+                }
+              );
               this.text(' ');
               this.span('UPDATE', {
                 className: 'button',
@@ -46,27 +49,33 @@ Todo.prototype = $.extend({}, Component, {
         }
       });
       if (self.modifying) {
-        this.form(function() {
-          this.input({
-            type: 'text',
-            name: 'input2',
-            value: self.text,
-            onkeyup: function(e) { self.changeText(e) }
-          });
-          this.button('Update', { disabled: false, onclick: function(e) { self.updateItem(e) } });
-          this.button('Cancel', { onclick: function(e) { self.reset() }})
-        }, { onclick: function(e) { return false } })
+        this.form(
+          { onclick: function(e) { return false } },
+          function() {
+            this.input({
+              type: 'text',
+              name: 'input2',
+              value: self.text,
+              onkeyup: function(e) { self.changeText(e) }
+            });
+            this.button('Update', { disabled: false, onclick: function(e) { self.updateItem(e) } });
+            this.button('Cancel', { onclick: function(e) { self.reset() }})
+          }
+        )
       }
       else {
-        this.form(function() {
-          this.input({
-            type: 'text',
-            name: 'input1',
-            value: self.text,
-            onkeyup: function(e) { self.changeText(e) }
-          });
-          this.button('Add', { disabled: false, onclick: function(e) { self.createItem(e) } })
-        }, { onclick: function(e) { return false } })
+        this.form(
+          { onclick: function(e) { return false } },
+          function() {
+            this.input({
+              type: 'text',
+              name: 'input1',
+              value: self.text,
+              onkeyup: function(e) { self.changeText(e) }
+            });
+            this.button('Add', { disabled: false, onclick: function(e) { self.createItem(e) } })
+          }
+        )
       }
     });
   },

@@ -4,18 +4,32 @@ var VdomBuilder = function VdomBuilder() {
 };
 
 VdomBuilder.prototype = {
-  markup: function(tagName, contentOrCallback, attributes) {
-    this.contentTag(tagName, contentOrCallback, attributes);
+  markup: function(tagName, arg1, arg2) {
+    this.contentTag(tagName, arg1, arg2);
     return this.elements[0];
   },
-  contentTag: function(tagName, contentOrCallback, attributes) {
-    if (typeof contentOrCallback === 'function') {
-      var vb = new VdomBuilder();
-      contentOrCallback.call(vb);
-      this.elements.push(this.h(tagName, attributes, vb.elements));
+  contentTag: function(tagName) {
+    var attributes, content, callback, vb;
+
+    if (typeof arguments[1] === 'string') {
+      content = arguments[1];
+      attributes = arguments[2] || {};
+      this.elements.push(this.h(tagName, attributes, content));
     }
-    else if (typeof contentOrCallback === 'string') {
-      this.elements.push(this.h(tagName, attributes, contentOrCallback));
+    else {
+      if (typeof arguments[1] === 'object') {
+        attributes = arguments[1];
+        callback = arguments[2];
+      }
+      else {
+        attributes = {};
+        callback = arguments[1];
+      }
+      if (typeof callback === 'function') {
+        var vb = new VdomBuilder();
+        callback.call(vb);
+        this.elements.push(this.h(tagName, attributes, vb.elements));
+      }
     }
   },
   tag: function(tagName, attributes) {
