@@ -50,7 +50,7 @@ Todo.prototype = $.extend({}, Component, {
       });
       if (self.modifying) {
         this.form(
-          { onclick: function(e) { return false } },
+          { onsubmit: function(e) { return false } },
           function() {
             this.input({
               type: 'text',
@@ -65,7 +65,7 @@ Todo.prototype = $.extend({}, Component, {
       }
       else {
         this.form(
-          { onclick: function(e) { return false } },
+          { onsubmit: function(e) { return false } },
           function() {
             this.input({
               type: 'text',
