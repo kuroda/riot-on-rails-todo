@@ -25,18 +25,18 @@ Todo.prototype = $.extend({}, Component, {
                   this.checkBox('', item.done, {
                     onclick: function(e) { self.toggleItem(item) }
                   })
-                  this.text(' ');
+                  this.space;
                   this.span(item.name, {
                     className: { modifying: item.modifying }
                   })
                 }
               );
-              this.text(' ');
+              this.space();
               this.span('UPDATE', {
                 className: 'button',
                 onclick: function(e) { self.editItem(item) }
               });
-              this.text(' ');
+              this.space();
               this.span('DELETE', {
                 className: 'button',
                 onclick: function(e) { self.destroyItem(item) }

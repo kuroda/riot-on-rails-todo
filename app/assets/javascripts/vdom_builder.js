@@ -44,6 +44,9 @@
     text: function(content) {
       this.elements.push(content);
     },
+    space: function() {
+      this.elements.push(' ');
+    }
     form: function(id, attributes, callback) {
       var vb = new VdomBuilder(this.component, id);
       callback.call(vb);
