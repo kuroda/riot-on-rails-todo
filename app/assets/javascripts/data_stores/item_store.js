@@ -49,22 +49,21 @@ ItemStore.prototype = $.extend(Observable, {
         self.refresh()
     })
   },
-  toggleItem: function(id) {
-    var self = this,
-        item = this.getItem(id)
+  toggleItem: function(item) {
+    var self = this
     $.ajax({
       type: 'PATCH',
-      url: '/api/items/' + id,
+      url: '/api/items/' + item.id,
       data: { item: { done: !item.done } }
     }).done(function(data) {
       if (data === 'OK')
         self.refresh()
     })
   },
-  setTarget: function(id) {
+  setTarget: function(item) {
     var self = this
     for (i = 0; i < self.items.length; i++) {
-      if (self.items[i].id === Number(id))
+      if (self.items[i].id === item.id)
         self.items[i].modifying = true
       else
         self.items[i].modifying = false

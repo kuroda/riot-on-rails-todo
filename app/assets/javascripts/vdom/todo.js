@@ -18,33 +18,31 @@ Todo.prototype = $.extend({}, Component, {
       this.h3('TODO');
       this.ul(function() {
         for (var i = 0; i < ds.items.length; i++) {
-          var item = ds.items[i];
-          this.li(function() {
-            this.label(function() {
-              this.input({
-                type: 'checkbox',
-                checked: item.done,
-                dataset: { id: item.id },
-                onclick: function(e) { self.toggleItem(e) }
-              })
+          (function(item) {
+            this.li(function() {
+              this.label(function() {
+                this.input({
+                  type: 'checkbox',
+                  checked: item.done,
+                  onclick: function(e) { self.toggleItem(item) }
+                })
+                this.text(' ');
+                this.span(item.name, {
+                  className: self.modifying && item.modifying && 'modifying'
+                })
+              }, { class: item.done && 'completed' })
               this.text(' ');
-              this.span(item.name, {
-                className: self.modifying && item.modifying && 'modifying'
-              })
-            }, { class: item.done && 'completed' })
-            this.text(' ');
-            this.span('UPDATE', {
-              className: 'button',
-              dataset: { id: item.id },
-              onclick: function(e) { self.editItem(e) }
-            });
-            this.text(' ');
-            this.span('DELETE', {
-              className: 'button',
-              dataset: { id: item.id },
-              onclick: function(e) { self.destroyItem(e) }
-            });
-          })
+              this.span('UPDATE', {
+                className: 'button',
+                onclick: function(e) { self.editItem(item) }
+              });
+              this.text(' ');
+              this.span('DELETE', {
+                className: 'button',
+                onclick: function(e) { self.destroyItem(item) }
+              });
+            })
+          }).call(this, ds.items[i]);
         }
       });
       if (self.modifying) {
@@ -84,9 +82,7 @@ Todo.prototype = $.extend({}, Component, {
     }
   },
 
-  editItem: function(e) {
-    var id = e.target.getAttribute('data-id');
-    var item = this.dataStore.getItem(id);
+  editItem: function(item) {
     if (this.modifying) {
       this.reset()
     }
@@ -94,7 +90,7 @@ Todo.prototype = $.extend({}, Component, {
       this.targetItem = item
       this.modifying = true
       this.text = item.name
-      this.dataStore.setTarget(id)
+      this.dataStore.setTarget(item)
     }
     this.update();
   },
@@ -106,14 +102,13 @@ Todo.prototype = $.extend({}, Component, {
     }
   },
 
-  destroyItem: function(e) {
-    var id = e.target.getAttribute('data-id');
+  destroyItem: function(item) {
     this.reset()
-    this.dataStore.deleteItem(id)
+    this.dataStore.deleteItem(item.id)
   },
 
-  toggleItem: function(e) {
-    this.dataStore.toggleItem(e.target.getAttribute('data-id'));
+  toggleItem: function(item) {
+    this.dataStore.toggleItem(item);
     return true;
   },
 
