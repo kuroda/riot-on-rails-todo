@@ -10,7 +10,7 @@ Todo.prototype = $.extend({}, Component, {
 
   render: function() {
     var self = this,
-        vb = new VdomBuilder(),
+        vb = new VdomBuilder(this),
         ds = this.dataStore;
 
     return vb.markup('div', function() {
@@ -55,12 +55,15 @@ Todo.prototype = $.extend({}, Component, {
           onsubmit: function(e) { return false }
         },
         function() {
-          var name = $('#edit-todo-form input[name="name"]').val() || '';
+          var form = self.forms['edit-todo-form'] || {}
           this.input({
-            type: 'text', name: 'name', value: name,
+            type: 'text', name: 'name',
             onkeyup: function(e) { self.update() }
           });
-          this.button('Update', { disabled: false, onclick: function(e) { self.updateItem(e) } });
+          this.button('Update', {
+            disabled: form['name'] == null || form['name'] === '',
+            onclick: function(e) { self.updateItem(e) }
+          });
           this.button('Cancel', { onclick: function(e) { self.reset() }})
         }
       )
@@ -72,13 +75,13 @@ Todo.prototype = $.extend({}, Component, {
           onsubmit: function(e) { return false }
         },
         function() {
-          var name = $('#new-todo-form input[name="name"]').val() || '';
+          var form = self.forms['new-todo-form'] || {};
           this.input({
-            type: 'text', name: 'name', value: name,
+            type: 'text', name: 'name',
             onkeyup: function(e) { self.update() }
           });
           this.button('Add', {
-            disabled: name === '',
+            disabled: form['name'] == null || form['name'] === '',
             onclick: function(e) { self.createItem(e) }
           })
         }

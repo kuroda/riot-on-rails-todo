@@ -1,4 +1,6 @@
-var VdomBuilder = function VdomBuilder() {
+var VdomBuilder = function VdomBuilder(component, formId) {
+  this.component = component;
+  this.formId = formId;
   this.h = virtualDom.h;
   this.elements = [];
 };
@@ -26,7 +28,7 @@ VdomBuilder.prototype = {
         callback = arguments[1];
       }
       if (typeof callback === 'function') {
-        var vb = new VdomBuilder();
+        var vb = new VdomBuilder(this.component, this.formId);
         callback.call(vb);
         this.elements.push(this.h(tagName, attributes, vb.elements));
       }
@@ -37,6 +39,23 @@ VdomBuilder.prototype = {
   },
   text: function(content) {
     this.elements.push(content);
+  },
+  form: function(attributes, callback) {
+    var vb = new VdomBuilder(this.component, attributes['id']);
+    callback.call(vb);
+    this.elements.push(this.h('form', attributes, vb.elements));
+  },
+  input: function(attributes) {
+    var form, name, value;
+    attributes = attributes || {};
+    name = attributes['name'];
+    value = attributes['value'];
+    if (value === undefined && name !== undefined && this.formId !== undefined) {
+      form = this.component.forms[this.formId];
+      if (form !== undefined && form[name] !== undefined)
+        attributes['value'] = form[name];
+    }
+    this.elements.push(this.h('input', attributes));
   }
 };
 
@@ -46,7 +65,7 @@ VdomBuilder.prototype = {
     'blockquote', 'body', 'button', 'canvas', 'caption', 'cite', 'code',
     'colgroup', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'div',
     'dl', 'dt', 'em', 'embed', 'fieldset', 'figcaption', 'figure', 'footer',
-    'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'html',
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'html',
     'i', 'iframe', 'ins', 'kbd', 'label', 'legend', 'li', 'main', 'map', 'mark',
     'menu', 'menuitem', 'meter', 'nav', 'noscript', 'object', 'ol', 'optgroup',
     'option', 'output', 'p', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's',
@@ -61,7 +80,7 @@ VdomBuilder.prototype = {
   }
 
   var voidElementNames = [
-    'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen',
+    'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'keygen',
     'link', 'menuitem', 'meta', 'param', 'source', 'track', 'wbr'
   ]
 
