@@ -20,14 +20,14 @@ Todo.prototype = $.extend({}, Component, {
           (function(item) {
             this.li(function() {
               this.label(
-                { class: item.done && 'completed' },
+                { className: { completed: item.done } },
                 function() {
                   this.checkBox('', item.done, {
                     onclick: function(e) { self.toggleItem(item) }
                   })
                   this.text(' ');
                   this.span(item.name, {
-                    className: self.targetItem && item.modifying && 'modifying'
+                    className: { modifying: item.modifying }
                   })
                 }
               );
@@ -46,30 +46,24 @@ Todo.prototype = $.extend({}, Component, {
         }
       });
 
-      this.form('edit-todo-form',
-        {
-          style: { display: self.targetItem ? '' : 'none' }
-        },
+      this.form('edit-todo-form', { visible: self.targetItem },
         function() {
           var form = self.forms['edit-todo-form'] || {}
           this.textField('name');
           this.button('Update', {
-            disabled: form['name'] == null || form['name'] === '',
+            disabled: !form['name'],
             onclick: function(e) { self.updateItem(e) }
           });
           this.button('Cancel', { onclick: function(e) { self.reset() }})
         }
       )
 
-      this.form('new-todo-form',
-        {
-          style: { display: self.targetItem ? 'none' : '' }
-        },
+      this.form('new-todo-form', { visible: !self.targetItem },
         function() {
           var form = self.forms['new-todo-form'] || {};
           this.textField('name');
           this.button('Add', {
-            disabled: form['name'] == null || form['name'] === '',
+            disabled: !form['name'],
             onclick: function(e) { self.createItem(e) }
           })
         }
@@ -87,6 +81,7 @@ Todo.prototype = $.extend({}, Component, {
 
   editItem: function(item) {
     if (this.targetItem !== undefined) {
+      this.dataStore.resetTarget()
       this.reset()
     }
     else {

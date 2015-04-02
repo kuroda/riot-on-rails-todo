@@ -61,12 +61,16 @@ ItemStore.prototype = $.extend(Observable, {
     })
   },
   setTarget: function(item) {
-    var self = this
-    for (i = 0; i < self.items.length; i++) {
-      if (self.items[i].id === item.id)
-        self.items[i].modifying = true
+    for (i = 0; i < this.items.length; i++) {
+      if (this.items[i].id === item.id)
+        this.items[i].modifying = true
       else
-        self.items[i].modifying = false
+        this.items[i].modifying = false
+    }
+  },
+  resetTarget: function() {
+    for (i = 0; i < this.items.length; i++) {
+      this.items[i].modifying = false
     }
   },
   getItem: function(id) {
