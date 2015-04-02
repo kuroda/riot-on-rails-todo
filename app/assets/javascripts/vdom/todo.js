@@ -22,9 +22,7 @@ Todo.prototype = $.extend({}, Component, {
               this.label(
                 { class: item.done && 'completed' },
                 function() {
-                  this.input({
-                    type: 'checkbox',
-                    checked: item.done,
+                  this.checkBox('', item.done, {
                     onclick: function(e) { self.toggleItem(item) }
                   })
                   this.text(' ');
@@ -48,17 +46,13 @@ Todo.prototype = $.extend({}, Component, {
         }
       });
 
-      this.form(
+      this.form('edit-todo-form',
         {
-          id: 'edit-todo-form',
           style: { display: self.targetItem ? '' : 'none' }
         },
         function() {
           var form = self.forms['edit-todo-form'] || {}
-          this.input({
-            type: 'text', name: 'name',
-            onkeyup: function(e) { self.update() }
-          });
+          this.textField('name');
           this.button('Update', {
             disabled: form['name'] == null || form['name'] === '',
             onclick: function(e) { self.updateItem(e) }
@@ -67,17 +61,13 @@ Todo.prototype = $.extend({}, Component, {
         }
       )
 
-      this.form(
+      this.form('new-todo-form',
         {
-          id: 'new-todo-form',
           style: { display: self.targetItem ? 'none' : '' }
         },
         function() {
           var form = self.forms['new-todo-form'] || {};
-          this.input({
-            type: 'text', name: 'name',
-            onkeyup: function(e) { self.update() }
-          });
+          this.textField('name');
           this.button('Add', {
             disabled: form['name'] == null || form['name'] === '',
             onclick: function(e) { self.createItem(e) }

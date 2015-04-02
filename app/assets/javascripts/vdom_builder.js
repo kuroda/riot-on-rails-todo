@@ -40,10 +40,11 @@ VdomBuilder.prototype = {
   text: function(content) {
     this.elements.push(content);
   },
-  form: function(attributes, callback) {
-    var vb = new VdomBuilder(this.component, attributes['id']);
+  form: function(id, attributes, callback) {
+    var vb = new VdomBuilder(this.component, id);
     callback.call(vb);
     attributes = attributes || {};
+    attributes['id'] = id;
     if (attributes['onsubmit'] === undefined) {
       attributes['onsubmit'] = function(e) { return false };
     }
@@ -60,6 +61,21 @@ VdomBuilder.prototype = {
         attributes['value'] = form[name];
     }
     this.elements.push(this.h('input', attributes));
+  },
+  textField: function(name, attributes) {
+    attributes = attributes || {};
+    attributes['type'] = 'text';
+    attributes['name'] = name;
+    if (attributes['onkeyup'] === undefined)
+      attributes['onkeyup'] = function(e) { self.update() };
+    this.input(attributes);
+  },
+  checkBox: function(name, checked, attributes) {
+    attributes = attributes || {};
+    attributes['type'] = 'checkbox';
+    if (name) attributes['name'] = name;
+    if (checked) attributes['checked'] = 'checked';
+    this.input(attributes);
   }
 };
 

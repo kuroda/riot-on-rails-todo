@@ -3,7 +3,6 @@
     mount: function(id) {
       this.root = document.getElementById(id);
       this.init();
-      console.log('xx')
       this.forms = {};
       this.tree = this.render();
       this.rootNode = virtualDom.create(this.tree);
