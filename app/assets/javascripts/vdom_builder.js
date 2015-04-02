@@ -43,6 +43,10 @@ VdomBuilder.prototype = {
   form: function(attributes, callback) {
     var vb = new VdomBuilder(this.component, attributes['id']);
     callback.call(vb);
+    attributes = attributes || {};
+    if (attributes['onsubmit'] === undefined) {
+      attributes['onsubmit'] = function(e) { return false };
+    }
     this.elements.push(this.h('form', attributes, vb.elements));
   },
   input: function(attributes) {

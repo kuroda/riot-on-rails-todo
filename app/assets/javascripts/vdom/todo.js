@@ -51,8 +51,7 @@ Todo.prototype = $.extend({}, Component, {
       this.form(
         {
           id: 'edit-todo-form',
-          style: { display: self.targetItem ? '' : 'none' },
-          onsubmit: function(e) { return false }
+          style: { display: self.targetItem ? '' : 'none' }
         },
         function() {
           var form = self.forms['edit-todo-form'] || {}
@@ -71,8 +70,7 @@ Todo.prototype = $.extend({}, Component, {
       this.form(
         {
           id: 'new-todo-form',
-          style: { display: self.targetItem ? 'none' : '' },
-          onsubmit: function(e) { return false }
+          style: { display: self.targetItem ? 'none' : '' }
         },
         function() {
           var form = self.forms['new-todo-form'] || {};
