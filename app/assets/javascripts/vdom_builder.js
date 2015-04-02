@@ -12,33 +12,33 @@
       return this.elements[0];
     },
     contentTag: function(tagName) {
-      var attributes, content, callback, vb;
+      var options, content, callback, vb;
 
       if (typeof arguments[1] === 'string') {
         content = arguments[1];
-        attributes = arguments[2] || {};
-        attributes = filter(attributes);
+        options = arguments[2] || {};
+        attributes = generateAttributes(options);
         this.elements.push(this.h(tagName, attributes, content));
       }
       else {
         if (typeof arguments[1] === 'object') {
-          attributes = arguments[1];
+          options = arguments[1];
           callback = arguments[2];
         }
         else {
-          attributes = {};
+          options = {};
           callback = arguments[1];
         }
         if (typeof callback === 'function') {
           var vb = new VdomBuilder(this.component, this.formId);
           callback.call(vb);
-          attributes = filter(attributes);
+          attributes = generateAttributes(options);
           this.elements.push(this.h(tagName, attributes, vb.elements));
         }
       }
     },
-    tag: function(tagName, attributes) {
-      attributes = filter(attributes);
+    tag: function(tagName, options) {
+      attributes = generateAttributes(options);
       this.elements.push(this.h(tagName, attributes));
     },
     text: function(content) {
@@ -46,46 +46,46 @@
     },
     space: function() {
       this.elements.push(' ');
-    }
-    form: function(id, attributes, callback) {
+    },
+    form: function(id, options, callback) {
       var vb = new VdomBuilder(this.component, id);
       callback.call(vb);
-      attributes = attributes || {};
-      attributes['id'] = id;
-      attributes = filter(attributes);
-      if (attributes['onsubmit'] === undefined) {
-        attributes['onsubmit'] = function(e) { return false };
+      options = options || {};
+      options['id'] = id;
+      if (options['onsubmit'] === undefined) {
+        options['onsubmit'] = function(e) { return false };
       }
+      attributes = generateAttributes(options);
       this.elements.push(this.h('form', attributes, vb.elements));
     },
-    input: function(attributes) {
+    input: function(options) {
       var form, name, value;
-      attributes = attributes || {};
-      name = attributes['name'];
-      value = attributes['value'];
-      attributes = filter(attributes);
+      options = options || {};
+      name = options['name'];
+      value = options['value'];
       if (value === undefined && name !== undefined && this.formId !== undefined) {
         form = this.component.forms[this.formId];
         if (form !== undefined && form[name] !== undefined)
-          attributes['value'] = form[name];
+          options['value'] = form[name];
       }
+      attributes = generateAttributes(options);
       this.elements.push(this.h('input', attributes));
     },
-    textField: function(name, attributes) {
+    textField: function(name, options) {
       var self = this;
-      attributes = attributes || {};
-      attributes['type'] = 'text';
-      attributes['name'] = name;
-      if (attributes['onkeyup'] === undefined)
-        attributes['onkeyup'] = function(e) { self.component.update() };
-      this.input(attributes);
+      options = options || {};
+      options['type'] = 'text';
+      options['name'] = name;
+      if (options['onkeyup'] === undefined)
+        options['onkeyup'] = function(e) { self.component.update() };
+      this.input(options);
     },
-    checkBox: function(name, checked, attributes) {
-      attributes = attributes || {};
-      attributes['type'] = 'checkbox';
-      if (name) attributes['name'] = name;
-      if (checked) attributes['checked'] = 'checked';
-      this.input(attributes);
+    checkBox: function(name, checked, options) {
+      options = options || {};
+      options['type'] = 'checkbox';
+      if (name) options['name'] = name;
+      if (checked) options['checked'] = 'checked';
+      this.input(options);
     },
     value: function(name) {
       var form;
@@ -96,26 +96,26 @@
     }
   };
 
-  function filter(attributes) {
-    if ('visible' in attributes && !attributes['visible']) {
-      attributes['style'] = attributes['style'] || {};
-      attributes['style']['display'] = 'none';
+  function generateAttributes(options) {
+    if ('visible' in options && !options['visible']) {
+      options['style'] = options['style'] || {};
+      options['style']['display'] = 'none';
     }
-    if (typeof attributes['className'] === 'object') {
+    if (typeof options['className'] === 'object') {
       var names = []
-      for (var name in attributes['className']) {
-        if (attributes['className'][name]) {
+      for (var name in options['className']) {
+        if (options['className'][name]) {
           names.push(name)
         }
       }
       if (names.length) {
-        attributes['className'] = names.join(' ')
+        options['className'] = names.join(' ')
       }
       else {
-        delete attributes['className'];
+        delete options['className'];
       }
     }
-    return attributes;
+    return options;
   }
 
   var normalElementNames = [
@@ -133,8 +133,8 @@
 
   for (var i = 0; i < normalElementNames.length; i++) {
     var tagName = normalElementNames[i];
-    VdomBuilder.prototype[tagName] = new Function("contentOrCallback", "attributes",
-      "this.contentTag('" + tagName + "', contentOrCallback, attributes)");
+    VdomBuilder.prototype[tagName] = new Function("arg1", "arg2",
+      "this.contentTag('" + tagName + "', arg1, arg2)");
   }
 
   var voidElementNames = [
@@ -144,7 +144,7 @@
 
   for (var i = 0; i < voidElementNames.length; i++) {
     var tagName = voidElementNames[i];
-    VdomBuilder.prototype[tagName] = new Function("attributes",
-      "this.tag('" + tagName + "', attributes)");
+    VdomBuilder.prototype[tagName] = new Function("options",
+      "this.tag('" + tagName + "', options)");
   }
 })();
