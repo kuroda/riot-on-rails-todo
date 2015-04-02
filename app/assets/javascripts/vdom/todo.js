@@ -48,10 +48,9 @@ Todo.prototype = $.extend({}, Component, {
 
       this.form('edit-todo-form', { visible: self.targetItem },
         function() {
-          var form = self.forms['edit-todo-form'] || {}
           this.textField('name');
           this.button('Update', {
-            disabled: !form['name'],
+            disabled: !this.value('name'),
             onclick: function(e) { self.updateItem(e) }
           });
           this.button('Cancel', { onclick: function(e) { self.reset() }})
@@ -60,10 +59,9 @@ Todo.prototype = $.extend({}, Component, {
 
       this.form('new-todo-form', { visible: !self.targetItem },
         function() {
-          var form = self.forms['new-todo-form'] || {};
           this.textField('name');
           this.button('Add', {
-            disabled: !form['name'],
+            disabled: !this.value('name'),
             onclick: function(e) { self.createItem(e) }
           })
         }

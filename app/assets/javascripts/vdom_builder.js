@@ -83,6 +83,13 @@
       if (name) attributes['name'] = name;
       if (checked) attributes['checked'] = 'checked';
       this.input(attributes);
+    },
+    value: function(name) {
+      var form;
+      if (name !== undefined && this.formId !== undefined) {
+        form = this.component.forms[this.formId];
+        if (form !== undefined) return form[name];
+      }
     }
   };
 
