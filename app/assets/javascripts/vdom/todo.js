@@ -5,8 +5,7 @@ Todo.prototype = $.extend({}, Component, {
     var self = this;
     this.dataStore = new ItemStore();
     this.dataStore.on('update', function() { self.update() });
-    this.text = '';
-    this.modifying = false;
+    this.targetItem = undefined;
   },
 
   render: function() {
@@ -30,7 +29,7 @@ Todo.prototype = $.extend({}, Component, {
                   })
                   this.text(' ');
                   this.span(item.name, {
-                    className: self.modifying && item.modifying && 'modifying'
+                    className: self.targetItem && item.modifying && 'modifying'
                   })
                 }
               );
@@ -48,65 +47,69 @@ Todo.prototype = $.extend({}, Component, {
           }).call(this, ds.items[i]);
         }
       });
-      if (self.modifying) {
-        this.form(
-          { onsubmit: function(e) { return false } },
-          function() {
-            this.input({
-              type: 'text',
-              name: 'input2',
-              value: self.text,
-              onkeyup: function(e) { self.changeText(e) }
-            });
-            this.button('Update', { disabled: false, onclick: function(e) { self.updateItem(e) } });
-            this.button('Cancel', { onclick: function(e) { self.reset() }})
-          }
-        )
-      }
-      else {
-        this.form(
-          { onsubmit: function(e) { return false } },
-          function() {
-            this.input({
-              type: 'text',
-              name: 'input1',
-              value: self.text,
-              onkeyup: function(e) { self.changeText(e) }
-            });
-            this.button('Add', { disabled: false, onclick: function(e) { self.createItem(e) } })
-          }
-        )
-      }
+
+      this.form(
+        {
+          id: 'edit-todo-form',
+          style: { display: self.targetItem ? '' : 'none' },
+          onsubmit: function(e) { return false }
+        },
+        function() {
+          var name = $('#edit-todo-form input[name="name"]').val() || '';
+          this.input({
+            type: 'text', name: 'name', value: name,
+            onkeyup: function(e) { self.update() }
+          });
+          this.button('Update', { disabled: false, onclick: function(e) { self.updateItem(e) } });
+          this.button('Cancel', { onclick: function(e) { self.reset() }})
+        }
+      )
+
+      this.form(
+        {
+          id: 'new-todo-form',
+          style: { display: self.targetItem ? 'none' : '' },
+          onsubmit: function(e) { return false }
+        },
+        function() {
+          var name = $('#new-todo-form input[name="name"]').val() || '';
+          this.input({
+            type: 'text', name: 'name', value: name,
+            onkeyup: function(e) { self.update() }
+          });
+          this.button('Add', {
+            disabled: name === '',
+            onclick: function(e) { self.createItem(e) }
+          })
+        }
+      )
     });
   },
 
-  changeText: function(e) {
-    this.text = e.target.value;
-  },
-
   createItem: function(e) {
-    if (this.text !== '') {
-      this.dataStore.createItem(this.text)
-      this.text = ''
+    var name = $('#new-todo-form input[name="name"]').val() || '';
+    if (name !== '') {
+      this.reset();
+      this.dataStore.createItem(name);
     }
   },
 
   editItem: function(item) {
-    if (this.modifying) {
+    if (this.targetItem !== undefined) {
       this.reset()
     }
     else {
       this.targetItem = item
-      this.modifying = true
-      this.text = item.name
       this.dataStore.setTarget(item)
+      $('#edit-todo-form input[name="name"]').val(item.name);
     }
     this.update();
   },
 
   updateItem: function(e) {
-    if (this.text !== '') {
-      this.dataStore.updateItem(this.targetItem, this.text)
+    var name = $('#edit-todo-form input[name="name"]').val() || '';
+    if (name !== '') {
+      this.dataStore.updateItem(this.targetItem, name)
       this.reset()
     }
   },
@@ -122,8 +125,9 @@ Todo.prototype = $.extend({}, Component, {
   },
 
   reset: function() {
-    this.modifying = false
-    this.text = ''
+    $('#new-todo-form input[name="name"]').val('');
+    $('#edit-todo-form input[name="name"]').val('');
+    this.targetItem = undefined
     this.update()
   }
 });
