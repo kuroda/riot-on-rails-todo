@@ -1,6 +1,6 @@
 var Todo = function Todo() {};
 
-Todo.prototype = $.extend({}, Component, {
+Todo.prototype = $.extend({}, Component.prototype, {
   init: function() {
     var self = this;
     this.dataStore = new ItemStore();
@@ -18,30 +18,7 @@ Todo.prototype = $.extend({}, Component, {
       b.ul(function(b) {
         for (var i = 0; i < ds.items.length; i++) {
           (function(item) {
-            b.li(function(b) {
-              b.label(
-                { className: { completed: item.done } },
-                function(b) {
-                  b.checkBox('', item.done, {
-                    onclick: function(e) { self.toggleItem(item) }
-                  })
-                  b.space;
-                  b.span(item.name, {
-                    className: { modifying: item.modifying }
-                  })
-                }
-              );
-              b.space();
-              b.span('UPDATE', {
-                className: 'button',
-                onclick: function(e) { self.editItem(item) }
-              });
-              b.space();
-              b.span('DELETE', {
-                className: 'button',
-                onclick: function(e) { self.destroyItem(item) }
-              });
-            })
+            self.renderListItem(b, item)
           })(ds.items[i]);
         }
       });
@@ -67,6 +44,34 @@ Todo.prototype = $.extend({}, Component, {
         }
       )
     });
+  },
+
+  renderListItem: function(b, item) {
+    var self = this;
+    return b.li(function(b) {
+      b.label(
+        { className: { completed: item.done } },
+        function(b) {
+          b.checkBox('', item.done, {
+            onclick: function(e) { self.toggleItem(item) }
+          })
+          b.space;
+          b.span(item.name, {
+            className: { modifying: item.modifying }
+          })
+        }
+      );
+      b.space();
+      b.span('UPDATE', {
+        className: 'button',
+        onclick: function(e) { self.editItem(item) }
+      });
+      b.space();
+      b.span('DELETE', {
+        className: 'button',
+        onclick: function(e) { self.destroyItem(item) }
+      });
+    })
   },
 
   createItem: function(e) {

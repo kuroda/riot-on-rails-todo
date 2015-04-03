@@ -1,7 +1,9 @@
 <div id="container">
-<div id="vdom-todo"></div>
+<div id="vdom-todo1" class="todo"></div>
+<div id="vdom-todo2" class="todo"></div>
 </div>
 
 <script>
-(new Todo()).mount("vdom-todo");
+(new Todo()).mount("vdom-todo1");
+(new CoffeeTodo()).mount("vdom-todo2");
 </script>

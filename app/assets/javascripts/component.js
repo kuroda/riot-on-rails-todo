@@ -1,5 +1,6 @@
-(function() {
-  window.Component = {
+Component = (function() {
+  function Component() {};
+  $.extend(Component.prototype, {
     mount: function(id) {
       this.root = document.getElementById(id);
       this.init();
@@ -16,7 +17,7 @@
       this.rootNode = virtualDom.patch(this.rootNode, patches);
       this.tree = newTree;
     }
-  };
+  });
 
   // Convert form data to JavaScript objects and set them to `forms` attribute.
   function serializeForms(component) {
@@ -32,4 +33,6 @@
       }
     });
   }
+
+  return Component;
 })();

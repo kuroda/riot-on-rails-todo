@@ -1,12 +1,12 @@
-(function() {
-  window.VdomBuilder = function VdomBuilder(component, formId) {
+VdomBuilder = (function() {
+  VdomBuilder = function VdomBuilder(component, formId) {
     this.component = component;
     this.formId = formId;
     this.h = virtualDom.h;
     this.elements = [];
   };
 
-  window.VdomBuilder.prototype = {
+  $.extend(VdomBuilder.prototype, {
     markup: function(tagName, arg1, arg2) {
       this.contentTag(tagName, arg1, arg2);
       return this.elements[0];
@@ -96,7 +96,7 @@
         if (form !== undefined) return form[name];
       }
     }
-  };
+  });
 
   function generateAttributes(options) {
     if ('visible' in options && !options['visible']) {
@@ -149,4 +149,6 @@
     VdomBuilder.prototype[tagName] = new Function("options",
       "this.tag('" + tagName + "', options)");
   }
+
+  return VdomBuilder;
 })();
