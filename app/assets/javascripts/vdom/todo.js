@@ -10,58 +10,58 @@ Todo.prototype = $.extend({}, Component, {
 
   render: function() {
     var self = this,
-        vb = new VdomBuilder(this),
+        b = new VdomBuilder(this),
         ds = this.dataStore;
 
-    return vb.markup('div', function() {
-      this.h3('TODO');
-      this.ul(function() {
+    return b.markup('div', function(b) {
+      b.h3('TODO');
+      b.ul(function(b) {
         for (var i = 0; i < ds.items.length; i++) {
           (function(item) {
-            this.li(function() {
-              this.label(
+            b.li(function(b) {
+              b.label(
                 { className: { completed: item.done } },
-                function() {
-                  this.checkBox('', item.done, {
+                function(b) {
+                  b.checkBox('', item.done, {
                     onclick: function(e) { self.toggleItem(item) }
                   })
-                  this.space;
-                  this.span(item.name, {
+                  b.space;
+                  b.span(item.name, {
                     className: { modifying: item.modifying }
                   })
                 }
               );
-              this.space();
-              this.span('UPDATE', {
+              b.space();
+              b.span('UPDATE', {
                 className: 'button',
                 onclick: function(e) { self.editItem(item) }
               });
-              this.space();
-              this.span('DELETE', {
+              b.space();
+              b.span('DELETE', {
                 className: 'button',
                 onclick: function(e) { self.destroyItem(item) }
               });
             })
-          }).call(this, ds.items[i]);
+          })(ds.items[i]);
         }
       });
 
-      this.form('edit-todo-form', { visible: self.targetItem },
-        function() {
-          this.textField('name');
-          this.button('Update', {
-            disabled: !this.value('name'),
+      b.form('edit-todo-form', { visible: self.targetItem },
+        function(b) {
+          b.textField('name');
+          b.button('Update', {
+            disabled: !b.value('name'),
             onclick: function(e) { self.updateItem(e) }
           });
-          this.button('Cancel', { onclick: function(e) { self.reset() }})
+          b.button('Cancel', { onclick: function(e) { self.reset() }})
         }
       )
 
-      this.form('new-todo-form', { visible: !self.targetItem },
-        function() {
-          this.textField('name');
-          this.button('Add', {
-            disabled: !this.value('name'),
+      b.form('new-todo-form', { visible: !self.targetItem },
+        function(b) {
+          b.textField('name');
+          b.button('Add', {
+            disabled: !b.value('name'),
             onclick: function(e) { self.createItem(e) }
           })
         }

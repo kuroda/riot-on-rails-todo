@@ -31,7 +31,8 @@
         }
         if (typeof callback === 'function') {
           var vb = new VdomBuilder(this.component, this.formId);
-          callback.call(vb);
+          if (callback.length === 0) { throw new Error("Callback requires an argument.") }
+          callback.call(this.component, vb);
           attributes = generateAttributes(options);
           this.elements.push(this.h(tagName, attributes, vb.elements));
         }
@@ -49,7 +50,8 @@
     },
     form: function(id, options, callback) {
       var vb = new VdomBuilder(this.component, id);
-      callback.call(vb);
+      if (callback.length === 0) { throw new Error("Callback requires an argument.") }
+      callback.call(this.component, vb);
       options = options || {};
       options['id'] = id;
       if (options['onsubmit'] === undefined) {
