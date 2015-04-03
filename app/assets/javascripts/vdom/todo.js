@@ -4,7 +4,7 @@ Todo.prototype = $.extend({}, Component, {
   init: function() {
     var self = this;
     this.dataStore = new ItemStore();
-    this.dataStore.on('update', function() { self.update() });
+    this.dataStore.on('update', function() { self.refresh() });
     this.targetItem = undefined;
   },
 
@@ -87,7 +87,7 @@ Todo.prototype = $.extend({}, Component, {
       this.dataStore.setTarget(item)
       $('#edit-todo-form input[name="name"]').val(item.name);
     }
-    this.update();
+    this.refresh();
   },
 
   updateItem: function(e) {
@@ -112,6 +112,6 @@ Todo.prototype = $.extend({}, Component, {
     $('#new-todo-form input[name="name"]').val('');
     $('#edit-todo-form input[name="name"]').val('');
     this.targetItem = undefined
-    this.update()
+    this.refresh()
   }
 });

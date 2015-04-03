@@ -77,7 +77,7 @@
       options['type'] = 'text';
       options['name'] = name;
       if (options['onkeyup'] === undefined)
-        options['onkeyup'] = function(e) { self.component.update() };
+        options['onkeyup'] = function(e) { self.component.refresh() };
       this.input(options);
     },
     checkBox: function(name, checked, options) {

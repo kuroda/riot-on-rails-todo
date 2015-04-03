@@ -6,7 +6,7 @@ Counter.prototype = $.extend({}, Component, {
         c = this.root.getAttribute("data-count");
     if (!isNaN(c)) c = 0;
     this.dataStore = new CountStore(c);
-    this.dataStore.on('update', function() { self.update() });
+    this.dataStore.on('update', function() { self.refresh() });
   },
 
   render: function() {

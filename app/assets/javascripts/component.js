@@ -9,7 +9,7 @@
       this.root.appendChild(this.rootNode);
     },
     init: function() {},
-    update: function() {
+    refresh: function() {
       serializeForms(this);
       var newTree = this.render();
       var patches = virtualDom.diff(this.tree, newTree);
