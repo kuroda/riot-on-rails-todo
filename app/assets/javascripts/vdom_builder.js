@@ -48,12 +48,15 @@ VdomBuilder = (function() {
     space: function() {
       this.elements.push(' ');
     },
-    form: function(id, options, callback) {
-      var vb = new VdomBuilder(this.component, id);
+    form: function(name, options, callback) {
+      var vb, attributes;
+
       if (callback.length === 0) { throw new Error("Callback requires an argument.") }
+      if (!this.component.forms[name]) this.component.forms[name] = {};
+      vb = new VdomBuilder(this.component, name);
       callback.call(this.component, vb);
       options = options || {};
-      options['id'] = id;
+      options['name'] = name;
       if (options['onsubmit'] === undefined) {
         options['onsubmit'] = function(e) { return false };
       }
@@ -62,6 +65,7 @@ VdomBuilder = (function() {
     },
     input: function(options) {
       var form, name, value;
+
       options = options || {};
       name = options['name'];
       value = options['value'];
@@ -75,11 +79,15 @@ VdomBuilder = (function() {
     },
     textField: function(name, options) {
       var self = this;
+
       options = options || {};
       options['type'] = 'text';
       options['name'] = name;
       if (options['onkeyup'] === undefined)
-        options['onkeyup'] = function(e) { self.component.refresh() };
+        options['onkeyup'] = function(e) {
+          self.component.forms[self.formId][name] = e.target.value;
+          self.component.refresh();
+        };
       this.input(options);
     },
     checkBox: function(name, checked, options) {
@@ -91,6 +99,7 @@ VdomBuilder = (function() {
     },
     value: function(name) {
       var form;
+
       if (name !== undefined && this.formId !== undefined) {
         form = this.component.forms[this.formId];
         if (form !== undefined) return form[name];

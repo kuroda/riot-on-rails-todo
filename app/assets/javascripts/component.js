@@ -1,5 +1,8 @@
 Component = (function() {
-  function Component() {};
+  Component = function Component() {
+    this.forms = {};
+  };
+
   $.extend(Component.prototype, {
     mount: function(id) {
       this.root = document.getElementById(id);
@@ -8,10 +11,10 @@ Component = (function() {
       this.tree = this.render();
       this.rootNode = virtualDom.create(this.tree);
       this.root.appendChild(this.rootNode);
+      serializeForms(this);
     },
     init: function() {},
     refresh: function() {
-      serializeForms(this);
       var newTree = this.render();
       var patches = virtualDom.diff(this.tree, newTree);
       this.rootNode = virtualDom.patch(this.rootNode, patches);
@@ -28,8 +31,8 @@ Component = (function() {
       $.each(ary, function() {
         obj[this.name] = this.value || '';
       });
-      if ($(this).attr('id')) {
-        component.forms[$(this).attr('id')] = obj;
+      if ($(this).attr('name')) {
+        component.forms[$(this).attr('name')] = obj;
       }
     });
   }
